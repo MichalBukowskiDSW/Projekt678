@@ -11,10 +11,6 @@ def parse_arguments():
     output_file = sys.argv[2]
     return input_file, output_file
 
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    print(f"Input file: {input_file}, Output file: {output_file}")
-
 def load_json(input_file):
     try:
         with open(input_file, 'r') as f:
@@ -25,11 +21,6 @@ def load_json(input_file):
         print(f"Failed to load JSON file: {e}")
         sys.exit(1)
 
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    if input_file.endswith('.json'):
-        data = load_json(input_file)
-
 def save_json(data, output_file):
     try:
         with open(output_file, 'w') as f:
@@ -38,13 +29,6 @@ def save_json(data, output_file):
     except Exception as e:
         print(f"Failed to save JSON file: {e}")
         sys.exit(1)
-
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    if input_file.endswith('.json'):
-        data = load_json(input_file)
-        if output_file.endswith('.json'):
-            save_json(data, output_file)
 
 def load_yaml(input_file):
     try:
@@ -56,13 +40,6 @@ def load_yaml(input_file):
         print(f"Failed to load YAML file: {e}")
         sys.exit(1)
 
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    if input_file.endswith('.json'):
-        data = load_json(input_file)
-    elif input_file.endswith('.yml') or input_file.endswith('.yaml'):
-        data = load_yaml(input_file)
-
 def save_yaml(data, output_file):
     try:
         with open(output_file, 'w') as f:
@@ -71,21 +48,6 @@ def save_yaml(data, output_file):
     except Exception as e:
         print(f"Failed to save YAML file: {e}")
         sys.exit(1)
-
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    if input_file.endswith('.json'):
-        data = load_json(input_file)
-        if output_file.endswith('.json'):
-            save_json(data, output_file)
-        elif output_file.endswith('.yml') or output_file.endswith('.yaml'):
-            save_yaml(data, output_file)
-    elif input_file.endswith('.yml') or input_file.endswith('.yaml'):
-        data = load_yaml(input_file)
-        if output_file.endswith('.json'):
-            save_json(data, output_file)
-        elif output_file.endswith('.yml') or output_file.endswith('.yaml'):
-            save_yaml(data, output_file)
 
 def load_xml(input_file):
     try:
