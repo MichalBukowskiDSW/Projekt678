@@ -2,6 +2,7 @@ import sys
 import json
 import yaml
 import xmltodict
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel
 
 def parse_arguments():
     if len(sys.argv) != 3:
@@ -68,29 +69,69 @@ def save_xml(data, output_file):
         print(f"Failed to save XML file: {e}")
         sys.exit(1)
 
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    if input_file.endswith('.json'):
-        data = load_json(input_file)
-        if output_file.endswith('.json'):
-            save_json(data, output_file)
-        elif output_file.endswith('.yml') or output_file.endswith('.yaml'):
-            save_yaml(data, output_file)
-        elif output_file.endswith('.xml'):
-            save_xml(data, output_file)
-    elif input_file.endswith('.yml') or input_file.endswith('.yaml'):
-        data = load_yaml(input_file)
-        if output_file.endswith('.json'):
-            save_json(data, output_file)
-        elif output_file.endswith('.yml') or output_file.endswith('.yaml'):
-            save_yaml(data, output_file)
-        elif output_file.endswith('.xml'):
-            save_xml(data, output_file)
-    elif input_file.endswith('.xml'):
-        data = load_xml(input_file)
-        if output_file.endswith('.json'):
-            save_json(data, output_file)
-        elif output_file.endswith('.yml') or output_file.endswith('.yaml'):
-            save_yaml(data, output_file)
-        elif output_file.endswith('.xml'):
-            save_xml(data, output_file)
+class ConverterApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.layout = QVBoxLayout()
+
+        self.input_label = QLabel("Input File: None")
+        self.output_label = QLabel("Output File: None")
+        self.layout.addWidget(self.input_label)
+        self.layout.addWidget(self.output_label)
+
+        self.input_button = QPushButton('Select Input File')
+        self.output_button = QPushButton('Select Output File')
+        self.convert_button = QPushButton('Convert')
+
+        self.input_button.clicked.connect(self.select_input_file)
+        self.output_button.clicked.connect(self.select_output_file)
+        self.convert_button.clicked.connect(self.convert_files)
+
+        self.layout.addWidget(self.input_button)
+        self.layout.addWidget(self.output_button)
+        self.layout.addWidget(self.convert_button)
+
+        self.setLayout(self.layout)
+        self.setWindowTitle('Data Converter')
+        self.show()
+
+    def select_input_file(self):
+        options = QFileDialog.Options()
+        file, _ = QFileDialog.getOpenFileName(self, "Select Input File", "", "All Files (*);;JSON Files (*.json);;YAML Files (*.yml *.yaml);;XML Files (*.xml)", options=options)
+        if file:
+            self.input_label.setText(f"Input File: {file}")
+            self.input_file = file
+
+    def select_output_file(self):
+        options = QFileDialog.Options()
+        file, _ = QFileDialog.getSaveFileName(self, "Select Output File", "", "All Files (*);;JSON Files (*.json);;YAML Files (*.yml *.yaml);;XML Files (*.xml)", options=options)
+        if file:
+            self.output_label.setText(f"Output File: {file}")
+            self.output_file = file
+
+    def convert_files(self):
+        try:
+            if self.input_file.endswith('.json'):
+                data = load_json(self.input_file)
+            elif self.input_file.endswith('.yml') or self.input_file.endswith('.yaml'):
+                data = load_yaml(self.input_file)
+            elif self.input_file.endswith('.xml'):
+                data = load_xml(self.input_file)
+
+            if self.output_file.endswith('.json'):
+                save_json(data, self.output_file)
+            elif self.output_file.endswith('.yml') or self.output_file.endswith('.yaml'):
+                save_yaml(data, self.output_file)
+            elif self.output_file.endswith('.xml'):
+                save_xml(data, self.output_file)
+            self.output_label.setText("Conversion Successful!")
+        except Exception as e:
+            self.output_label.setText(f"Conversion Failed: {e}")
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = ConverterApp()
+    sys.exit(app.exec_())
