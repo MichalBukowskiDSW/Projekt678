@@ -1,5 +1,6 @@
 import sys
 import json
+import yaml
 
 def parse_arguments():
     if len(sys.argv) != 3:
@@ -43,3 +44,20 @@ if __name__ == "__main__":
         data = load_json(input_file)
         if output_file.endswith('.json'):
             save_json(data, output_file)
+
+def load_yaml(input_file):
+    try:
+        with open(input_file, 'r') as f:
+            data = yaml.safe_load(f)
+        print("YAML data loaded successfully")
+        return data
+    except Exception as e:
+        print(f"Failed to load YAML file: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    input_file, output_file = parse_arguments()
+    if input_file.endswith('.json'):
+        data = load_json(input_file)
+    elif input_file.endswith('.yml') or input_file.endswith('.yaml'):
+        data = load_yaml(input_file)
