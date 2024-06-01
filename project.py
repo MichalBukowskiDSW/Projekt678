@@ -9,10 +9,6 @@ def parse_arguments():
     output_file = sys.argv[2]
     return input_file, output_file
 
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    print(f"Input file: {input_file}, Output file: {output_file}")
-
 def load_json(input_file):
     try:
         with open(input_file, 'r') as f:
@@ -22,11 +18,6 @@ def load_json(input_file):
     except Exception as e:
         print(f"Failed to load JSON file: {e}")
         sys.exit(1)
-
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    if input_file.endswith('.json'):
-        data = load_json(input_file)
 
 def save_json(data, output_file):
     try:
