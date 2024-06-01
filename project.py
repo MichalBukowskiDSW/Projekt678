@@ -9,10 +9,6 @@ def parse_arguments():
     output_file = sys.argv[2]
     return input_file, output_file
 
-if __name__ == "__main__":
-    input_file, output_file = parse_arguments()
-    print(f"Input file: {input_file}, Output file: {output_file}")
-
 def load_json(input_file):
     try:
         with open(input_file, 'r') as f:
