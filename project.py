@@ -27,3 +27,19 @@ if __name__ == "__main__":
     input_file, output_file = parse_arguments()
     if input_file.endswith('.json'):
         data = load_json(input_file)
+
+def save_json(data, output_file):
+    try:
+        with open(output_file, 'w') as f:
+            json.dump(data, f, indent=4)
+        print("JSON data saved successfully")
+    except Exception as e:
+        print(f"Failed to save JSON file: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    input_file, output_file = parse_arguments()
+    if input_file.endswith('.json'):
+        data = load_json(input_file)
+        if output_file.endswith('.json'):
+            save_json(data, output_file)
