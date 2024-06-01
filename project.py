@@ -1,4 +1,5 @@
 import sys
+import json
 
 def parse_arguments():
     if len(sys.argv) != 3:
@@ -11,3 +12,18 @@ def parse_arguments():
 if __name__ == "__main__":
     input_file, output_file = parse_arguments()
     print(f"Input file: {input_file}, Output file: {output_file}")
+
+def load_json(input_file):
+    try:
+        with open(input_file, 'r') as f:
+            data = json.load(f)
+        print("JSON data loaded successfully")
+        return data
+    except Exception as e:
+        print(f"Failed to load JSON file: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    input_file, output_file = parse_arguments()
+    if input_file.endswith('.json'):
+        data = load_json(input_file)
