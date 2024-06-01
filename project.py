@@ -1,6 +1,7 @@
 import sys
 import json
 import yaml
+import xmltodict
 
 def parse_arguments():
     if len(sys.argv) != 3:
@@ -85,3 +86,22 @@ if __name__ == "__main__":
             save_json(data, output_file)
         elif output_file.endswith('.yml') or output_file.endswith('.yaml'):
             save_yaml(data, output_file)
+
+def load_xml(input_file):
+    try:
+        with open(input_file, 'r') as f:
+            data = xmltodict.parse(f.read())
+        print("XML data loaded successfully")
+        return data
+    except Exception as e:
+        print(f"Failed to load XML file: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    input_file, output_file = parse_arguments()
+    if input_file.endswith('.json'):
+        data = load_json(input_file)
+    elif input_file.endswith('.yml') or input_file.endswith('.yaml'):
+        data = load_yaml(input_file)
+    elif input_file.endswith('.xml'):
+        data = load_xml(input_file)
